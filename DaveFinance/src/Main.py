@@ -1,5 +1,5 @@
-from DaveFinance.src.DataCollect.StockPriceData import GetStockPriceInfo
-from DaveFinance.src.DataCollect.DataGather import DataGather
+from StockPriceData import GetStockPriceInfo
+from DataGather import DataGather
 import pandas as pd
 
 

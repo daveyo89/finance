@@ -1,0 +1,10 @@
+Ide jön majd a portolio/company/historical_stock_price.csv && company_statistics.csv
+
+pl:
+/Data/Tech/TSLA/historical_stock_price.csv
+/Data/Tech/TSLA/company_statistics.csv
+/Data/Tech/AMD/historical_stock_price.csv
+/Data/Tech/AMD/company_statistics.csv
+
+/Data/Weed/CGC/company_statistics.csv
+/Data/Weed/CGC/historical_stock_price.csv
