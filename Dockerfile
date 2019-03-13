@@ -7,7 +7,7 @@ COPY . /code/
 WORKDIR /code
 RUN apk add linux-headers
 RUN apk --no-cache --update-cache add bash gcc gfortran python python-dev \ 
-    py-pip build-base wget freetype-dev libpng-dev openblas-dev
+    py-pip build-base wget freetype-dev libpng-dev openblas-dev libxml2-dev libxslt-dev
 RUN pip install numpy
 RUN pip install pandas
 RUN pip install --upgrade pip
