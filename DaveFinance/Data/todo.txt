@@ -6,5 +6,5 @@ pl:
 /Data/Tech/AMD/historical_stock_price.csv
 /Data/Tech/AMD/company_statistics.csv
 
-/Data/Weed/CGC/company_statistics.csv
-/Data/Weed/CGC/historical_stock_price.csv
+/Data/Weed/cgc_s.csv #statistics
+/Data/Weed/cgc_p.csv #prices
