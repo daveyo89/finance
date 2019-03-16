@@ -1,33 +1,96 @@
 from DaveFinance.src.StockPriceData import GetStockPriceInfo
 from DaveFinance.src.DataGather import *
-# TODO: tickers list will come from  best-index or a worth-of-it index.
+from pathlib import Path
+
+formatters = {
+    'RED': '\033[91m',
+    'GREEN': '\033[92m',
+    'END': '\033[0m',
+}
+
+
+def get_choice(options):
+    options = list(enumerate(list(options)))
+    for e, x in options:
+        print(f'{e}: {x}')
+    try:
+        choice = int(input("Please select an option: "))
+        if choice >= len(options) or choice < 0:
+            return "Invalid argument!"
+        return options[choice][1]
+    except (TypeError, ValueError) as te:
+        print(str(te))
+        return "Invalid argument!"
+
+
+def read_to_df(path):
+    df = pd.read_csv(path)
+    return list(df['Symbol'])
+
+
+def list_portfolios(path='../Data/Portfolio'):
+    options = [x.name for x in Path(os.path.join(os.getcwd(), path)).glob('*/')]
+    return options
 
 
 class Main:
 
     def __init__(self):
-
         pass
 
-    # # start_date = DataGather.get_year_from_today(1)
-    # # end_date = DataGather.get_year_from_today(0) # Leave blank for defaults = Get all available data.
+    def main(self):
+        loop = True
+        while loop:
+            try:
+                options = ["New Portfolio", "Get Stock Prices", "Exit"]
+                choice = (get_choice(options=options))
+                if choice == options[0]:
+                    choice = get_choice(options=["Custom", "Category", "All", "Back"])
+                    if choice == "Custom":
+                        DataGather().get_custom_tickers()
+                        continue
+                    elif choice == "Category":
+                        DataGather().category_tickers()
+                        continue
+                    elif choice == "All":
+                        DataGather().all_market_tickers()
+                        continue
+                    elif choice == "Cancel":
+                        continue
 
-    dg = DataGather()
-    custom_ticks, name = dg.get_custom_tickers()
-    #
-    # portfolio, portfolio_name = DataGather.portfolio_builder()  # Get portfolio name and tickers.
-    #
-    # DataGather.get_tickers(portfolio, portfolio_name)
-    # #
-    # df = pd.read_csv(f"../Data/Portfolio/portfolios/{portfolio_name}.csv")
-    #
-    tickers2 = (list(custom_ticks["Symbol"]))
-    print(tickers2)
-    #
-    # TODO: StockPriceDataban a ticker paramétert a portfoliobol akarom kivenni, nem pedig így átadni.
-    # TODO: választhatóvá kell tenni ugyanugy mint a kategoriaknal.
-    GetStockPriceInfo(tickers2, portfolio_name=name).get_historical_price()
-    # #
+                elif choice == options[1]:
+                    choice = get_choice(options=list_portfolios())
+                    if choice == "all":
+                        path = f"../Data/Portfolio/{choice}/all_tickers.csv"
+                        tickers = read_to_df(path)
+                        GetStockPriceInfo(tickers, portfolio_name="all").get_historical_price()
+                        continue
+                    elif choice == "categorical":
+                        path = f"../Data/Portfolio/{choice}/"
+                        choice = get_choice(options=list_portfolios(path))
+                        print(f"You chose: # {choice} #")
+                        tickers = read_to_df(f"{path}/{choice}")
+                        GetStockPriceInfo(tickers=tickers, portfolio_name=choice).get_historical_price()
+                        continue
+                    elif choice == "custom":
+                        path = f"../Data/Portfolio/{choice}/"
+                        choice = get_choice(options=list_portfolios(path))
+                        tickers = read_to_df(f"{path}/{choice}")
+                        print(f"You chose: # {choice} #")
+                        print(tickers)
+                        GetStockPriceInfo(tickers=tickers,
+                                          portfolio_name=choice.replace('.csv', '')).get_historical_price()
+                        continue
+
+                elif choice == "Exit":
+                    loop = False
+                else:
+                    continue
+
+            except FileNotFoundError as e:
+                print(f"{formatters['RED']}File not found, please build portfolio first!\n" + str(e)
+                      + f"{formatters['END']}")
 
 
-Main()
+m = Main()
+m.main()

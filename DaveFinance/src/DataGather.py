@@ -39,6 +39,11 @@ def portfolio_builder():
     return portfolio, portfolio_name
 
 
+def get_year_from_today(year):
+    dates = (dt.datetime.now() - relativedelta(years=year)).date()
+    return [int(date) for date in ",".join([dates.strftime("%Y,%m,%d")]).split(",")]
+
+
 class DataGather:
     """
     Data gathering.
@@ -49,6 +54,7 @@ class DataGather:
         self.df = self.df.loc[:, ~self.df.columns.str.match('Unnamed')]
         self.df['Sector'].fillna("Unknown", inplace=True)
         os.makedirs("../Data/Portfolio", exist_ok=True)
+        os.makedirs("../Data/Portfolio/all", exist_ok=True)
         os.makedirs("../Data/Portfolio/custom", exist_ok=True)
         os.makedirs("../Data/Portfolio/categorical", exist_ok=True)
 
@@ -57,7 +63,7 @@ class DataGather:
         :return pandasDataFrame
         """
         df = self.df
-        df.to_csv(f"../Data/Portfolio/portfolios/all_tickers.csv",
+        df.to_csv(f"../Data/Portfolio/all/all_tickers.csv",
                   sep=',', encoding='utf-8', mode='w', index=False, header=True)
         return df
 
@@ -75,17 +81,12 @@ class DataGather:
         """Get all ticker symbols from previously downloaded csv-s and put them in tickers.csv"""
         portfolio, portfolio_name = portfolio_builder()
         df = self.df
-        df.set_index("Symbol", inplace=True)
-        df.insert(loc=0, column='Symbol', value=df.index)
+        df = df.loc[df["Symbol"].isin(portfolio)]
+        # df.set_index("Symbol", inplace=True)
+        # df.insert(loc=0, column='Symbol', value=df.index)
         try:
-            df.loc[portfolio].to_csv(f"../Data/Portfolio/custom/{portfolio_name}.csv",
-                                     sep=',', encoding='utf-8', mode='w', index=False, header=True)
+            df.to_csv(f"../Data/Portfolio/custom/{''.join(portfolio_name)}.csv",
+                      sep=',', encoding='utf-8', mode='w', index=False, header=True)
         except KeyError as ke:
             print(str(ke))
-        return df.loc[portfolio], portfolio_name
-    # Use this method from Main.py
-
-    @staticmethod
-    def get_year_from_today(year):
-        dates = (dt.datetime.now() - relativedelta(years=year)).date()
-        return [int(date) for date in ",".join([dates.strftime("%Y,%m,%d")]).split(",")]
+        return df, portfolio_name

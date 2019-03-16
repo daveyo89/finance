@@ -6,7 +6,8 @@ from tqdm import tqdm
 
 class GetStockPriceInfo:
     """Get detailed stock price info"""
-    def __init__(self, tickers: list, portfolio_name, start=None, end=None, ):
+
+    def __init__(self, tickers: list, portfolio_name, start=None, end=None):
         self.tickers = tickers
         self.start = start
         self.end = end
@@ -26,7 +27,7 @@ class GetStockPriceInfo:
             self.end = dt.datetime(self.end[0], self.end[1], self.end[2])
 
         print(f'Getting info for {self.tickers} - {self.start if self.start else "default date to "}'
-              f'{""if self.end else "default date."}')
+              f'{"" if self.end else "default date."}')
         for ticker in tqdm(self.tickers):
             try:
                 df = web.DataReader(ticker, 'yahoo', self.start, self.end)
@@ -41,4 +42,3 @@ class GetStockPriceInfo:
             except Exception as e:
                 print(f"Couldn't get {ticker} info. Error: {str(e)}\n")
                 continue
-
