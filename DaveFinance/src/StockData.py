@@ -4,16 +4,19 @@ import os
 from tqdm import tqdm
 
 
-class GetStockPriceInfo:
+class GetStockInfo:
+
     """Get detailed stock price info"""
-    def __init__(self, tickers: list, portfolio_name, start=None, end=None, ):
+
+    def __init__(self, tickers: list, portfolio_name, start=None, end=None):
         self.tickers = tickers
         self.start = start
         self.end = end
         self.portfolio_name = portfolio_name
+        self.stock_data_path = "../Data/stock_data"
 
-        os.makedirs("stock_data", exist_ok=True)
-        os.makedirs(f"stock_data/{portfolio_name}", exist_ok=True)
+        os.makedirs(self.stock_data_path, exist_ok=True)
+        os.makedirs(f"{self.stock_data_path}/{portfolio_name}", exist_ok=True)
 
     def __repr__(self):
         return f"""Get historical data for {self.tickers} stocks."""
@@ -25,7 +28,7 @@ class GetStockPriceInfo:
             self.end = dt.datetime(self.end[0], self.end[1], self.end[2])
 
         print(f'Getting info for {self.tickers} - {self.start if self.start else "default date to "}'
-              f'{""if self.end else "default date."}')
+              f'{"" if self.end else "default date."}')
         for ticker in tqdm(self.tickers):
             try:
                 df = web.DataReader(ticker, 'yahoo', self.start, self.end)
@@ -33,11 +36,10 @@ class GetStockPriceInfo:
                 df.set_index("Date", inplace=True)
                 df.sort_index(inplace=True)
 
-                df.to_csv(f'stock_data/{self.portfolio_name}/{ticker}.csv')
+                df.to_csv(f'{self.stock_data_path}/{self.portfolio_name}/{ticker}_price.csv')
             except KeyError as e:
                 print(f"{str(e)} key error, date range might be too far back.\n")
                 continue
             except Exception as e:
                 print(f"Couldn't get {ticker} info. Error: {str(e)}\n")
                 continue
-

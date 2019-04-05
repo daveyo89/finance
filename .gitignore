@@ -1,6 +1,7 @@
 *.csv
 !nasdaq.csv
 !nyse.csv
+!amex.csv
 .idea
 stock_data
 Portfolio
