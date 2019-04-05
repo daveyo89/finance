@@ -46,7 +46,7 @@ def get_year_from_today(year):
 
 class DataGather:
     """
-    Data gathering.
+        Data gathering.
     """
 
     def __init__(self):
@@ -82,8 +82,7 @@ class DataGather:
         portfolio, portfolio_name = portfolio_builder()
         df = self.df
         df = df.loc[df["Symbol"].isin(portfolio)]
-        # df.set_index("Symbol", inplace=True)
-        # df.insert(loc=0, column='Symbol', value=df.index)
+
         try:
             df.to_csv(f"../Data/Portfolio/custom/{''.join(portfolio_name)}.csv",
                       sep=',', encoding='utf-8', mode='w', index=False, header=True)

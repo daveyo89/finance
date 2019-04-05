@@ -1,4 +1,4 @@
-from DaveFinance.src.StockPriceData import GetStockPriceInfo
+from DaveFinance.src.StockData import GetStockInfo
 from DaveFinance.src.DataGather import *
 from pathlib import Path
 
@@ -63,14 +63,14 @@ class Main:
                     if choice == "all":
                         path = f"../Data/Portfolio/{choice}/all_tickers.csv"
                         tickers = read_to_df(path)
-                        GetStockPriceInfo(tickers, portfolio_name="all").get_historical_price()
+                        GetStockInfo(tickers, portfolio_name="all").get_historical_price()
                         continue
                     elif choice == "categorical":
                         path = f"../Data/Portfolio/{choice}/"
                         choice = get_choice(options=list_portfolios(path))
                         print(f"You chose: # {choice} #")
                         tickers = read_to_df(f"{path}/{choice}")
-                        GetStockPriceInfo(tickers=tickers, portfolio_name=choice).get_historical_price()
+                        GetStockInfo(tickers=tickers, portfolio_name=choice).get_historical_price()
                         continue
                     elif choice == "custom":
                         path = f"../Data/Portfolio/{choice}/"
@@ -78,8 +78,8 @@ class Main:
                         tickers = read_to_df(f"{path}/{choice}")
                         print(f"You chose: # {choice} #")
                         print(tickers)
-                        GetStockPriceInfo(tickers=tickers,
-                                          portfolio_name=choice.replace('.csv', '')).get_historical_price()
+                        GetStockInfo(tickers=tickers,
+                                     portfolio_name=choice.replace('.csv', '')).get_historical_price()
                         continue
 
                 elif choice == "Exit":

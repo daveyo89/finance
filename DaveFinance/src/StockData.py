@@ -4,7 +4,8 @@ import os
 from tqdm import tqdm
 
 
-class GetStockPriceInfo:
+class GetStockInfo:
+
     """Get detailed stock price info"""
 
     def __init__(self, tickers: list, portfolio_name, start=None, end=None):
@@ -35,7 +36,7 @@ class GetStockPriceInfo:
                 df.set_index("Date", inplace=True)
                 df.sort_index(inplace=True)
 
-                df.to_csv(f'{self.stock_data_path}/{self.portfolio_name}/{ticker}.csv')
+                df.to_csv(f'{self.stock_data_path}/{self.portfolio_name}/{ticker}_price.csv')
             except KeyError as e:
                 print(f"{str(e)} key error, date range might be too far back.\n")
                 continue
