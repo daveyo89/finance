@@ -1,5 +1,6 @@
-from DaveFinance.src.StockData import GetStockInfo
-from DaveFinance.src.DataGather import *
+from StockData import GetStockInfo
+from DataGather import *
+
 from pathlib import Path
 
 formatters = {
